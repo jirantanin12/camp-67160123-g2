@@ -3,102 +3,144 @@
 <head>
     <meta charset="utf-8"/>
     <title>Workshop HTML</title>
-    <link rel="stylesheet" href="css/bootstrap.css"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}"/>
 </head>
 <body>
 
 <div class="container pt-5">
     <h1>Workshop #HTML - FORM</h1>
 
-    <form>
+    <form id="html101Form" novalidate>
+
+        <div id="formAlert" class="alert d-none" role="alert"></div>
 
         <div class="mb-3 row">
             <label for="inputFirstName" class="col-sm-2 col-form-label">ชื่อ</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputFirstName" placeholder="Firstname">
+                <input type="text" class="form-control" id="inputFirstName" name="first_name" placeholder="Firstname">
+                <div class="invalid-feedback">กรุณากรอกชื่อ</div>
             </div>
         </div>
 
         <div class="mb-3 row">
             <label for="inputLastName" class="col-sm-2 col-form-label">นามสกุล</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputLastName" placeholder="Lastname">
+                <input type="text" class="form-control" id="inputLastName" name="last_name" placeholder="Lastname">
+                <div class="invalid-feedback">กรุณากรอกนามสกุล</div>
             </div>
         </div>
 
         <div class="mb-3 row">
             <label for="bdate" class="col-sm-2 col-form-label">วัน/เดือน/ปี</label>
             <div class="col-sm-10">
-                <input type="date" class="form-control" id="bdate">
+                <input type="date" class="form-control" id="bdate" name="birthdate">
+                <div class="invalid-feedback">กรุณาเลือกวันเดือนปีเกิด</div>
             </div>
         </div>
 
         <div class="mb-3 row">
-    <label class="col-sm-2 col-form-label">เพศ</label>
-    <div class="col-sm-10">
-
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="gender" value="male" id="gender1">
-            <label class="form-check-label" for="gender1">เพศชาย</label>
+            <label for="age" class="col-sm-2 col-form-label">อายุ</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="age" name="age" placeholder="Age" readonly>
+                <div class="invalid-feedback">กรุณาเลือกวันเกิดเพื่อคำนวณอายุ</div>
+            </div>
         </div>
 
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="gender" value="female" id="gender2">
-            <label class="form-check-label" for="gender2">เพศหญิง</label>
-        </div>
+        <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">เพศ</label>
+            <div class="col-sm-10" id="genderGroup">
 
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="gender" value="none" id="gender3">
-            <label class="form-check-label" for="gender3">ไม่ต้องการตอบ</label>
-        </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" value="male" id="gender1">
+                    <label class="form-check-label" for="gender1">เพศชาย</label>
+                </div>
 
-    </div>
-</div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" value="female" id="gender2">
+                    <label class="form-check-label" for="gender2">เพศหญิง</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" value="none" id="gender3">
+                    <label class="form-check-label" for="gender3">ไม่ต้องการตอบ</label>
+                </div>
+
+                <div class="text-danger small d-none" id="genderError">กรุณาเลือกเพศ</div>
+            </div>
+        </div>
 
         <div class="mb-3 row">
             <label class="col-sm-2 col-form-label">รูปภาพ</label>
             <div class="col-sm-10">
-                <input type="file" class="form-control">
+                <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+                <div class="invalid-feedback">กรุณาเลือกรูปภาพ</div>
             </div>
         </div>
 
         <div class="mb-3 row">
             <label class="col-sm-2 col-form-label">ที่อยู่</label>
             <div class="col-sm-10">
-                <textarea name="location" cols="40" rows="5" class="form-control"></textarea>
+                <textarea name="location" id="location" cols="40" rows="5" class="form-control"></textarea>
+                <div class="invalid-feedback">กรุณากรอกที่อยู่</div>
             </div>
         </div>
 
+        <!-- สีที่ชอบ: แดง/เขียว/สุ่ม -->
         <div class="mb-3 row">
             <label class="col-sm-2 col-form-label">สีที่ชอบ</label>
-            <div class="col-sm-10">
-                <input type="color" class="form-control form-control-color">
+            <div class="col-sm-10" id="colorGroup">
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="fav_color" id="colorRed" value="red">
+                    <label class="form-check-label" for="colorRed">สีแดง</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="fav_color" id="colorGreen" value="green">
+                    <label class="form-check-label" for="colorGreen">สีเขียว</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="fav_color" id="colorRandom" value="random">
+                    <label class="form-check-label" for="colorRandom">อะไรก็ได้ (สุ่ม)</label>
+                </div>
+
+                <div class="text-danger small d-none" id="colorError">กรุณาเลือกสีที่ชอบ</div>
             </div>
         </div>
 
+        <!-- แนวเพลงที่ชอบ: checkbox เลือกได้หลายข้อ -->
         <div class="mb-3 row">
-            <label for="favsongstyle" class="col-sm-2 col-form-label">แนวเพลงที่ชอบ</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="favsongstyle" placeholder="แนวเพลงที่ชอบ">
+            <label class="col-sm-2 col-form-label">แนวเพลงที่ชอบ</label>
+            <div class="col-sm-10" id="musicGroup">
+
+                <div class="form-check"><input class="form-check-input" type="checkbox" name="music[]" value="pop" id="mPop"><label class="form-check-label" for="mPop">Pop</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" name="music[]" value="rock" id="mRock"><label class="form-check-label" for="mRock">Rock</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" name="music[]" value="hiphop" id="mHipHop"><label class="form-check-label" for="mHipHop">Hip-hop/Rap</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" name="music[]" value="edm" id="mEDM"><label class="form-check-label" for="mEDM">EDM</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" name="music[]" value="rnb" id="mRNB"><label class="form-check-label" for="mRNB">R&amp;B</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" name="music[]" value="jazz" id="mJazz"><label class="form-check-label" for="mJazz">Jazz</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" name="music[]" value="classic" id="mClassic"><label class="form-check-label" for="mClassic">Classical</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" name="music[]" value="acoustic" id="mAcoustic"><label class="form-check-label" for="mAcoustic">Acoustic</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" name="music[]" value="kpop" id="mKpop"><label class="form-check-label" for="mKpop">K-pop</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" name="music[]" value="tpop" id="mTpop"><label class="form-check-label" for="mTpop">T-pop</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" name="music[]" value="lukthung" id="mLukthung"><label class="form-check-label" for="mLukthung">ลูกทุ่ง</label></div>
+
+                <div class="text-danger small d-none" id="musicError">กรุณาเลือกแนวเพลงอย่างน้อย 1 แนว</div>
             </div>
         </div>
 
+        <!-- ยินยอม: ต้องติ๊ก -->
         <div class="mb-3 row">
-    <label class="col-sm-2 col-form-label">ยินยอมให้เก็บข้อมูล</label>
-    <div class="col-sm-10">
-
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="consent" value="yes" id="consent1">
-            <label class="form-check-label" for="consent1">ยินยอม</label>
+            <label class="col-sm-2 col-form-label">ยินยอมให้เก็บข้อมูล</label>
+            <div class="col-sm-10">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="consentYes" name="consent_yes" value="yes">
+                    <label class="form-check-label" for="consentYes">ยินยอม</label>
+                </div>
+                <div class="text-danger small d-none" id="consentError">ต้องติ๊ก “ยินยอม” ก่อนส่งฟอร์ม</div>
+            </div>
         </div>
-
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="consent" value="no" id="consent2">
-            <label class="form-check-label" for="consent2">ไม่ยินยอม</label>
-        </div>
-
-    </div>
-</div>
 
         <div class="mb-3 row">
             <div class="col-sm-10">
@@ -110,6 +152,118 @@
     </form>
 
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('html101Form');
+  const alertBox = document.getElementById('formAlert');
+
+  const firstName = document.getElementById('inputFirstName');
+  const lastName  = document.getElementById('inputLastName');
+  const bdate     = document.getElementById('bdate');
+  const age       = document.getElementById('age');
+  const photo     = document.getElementById('photo');
+  const location  = document.getElementById('location');
+
+  const genderError  = document.getElementById('genderError');
+  const colorError   = document.getElementById('colorError');
+  const musicError   = document.getElementById('musicError');
+  const consentError = document.getElementById('consentError');
+
+  function showAlert(type, msg) {
+    alertBox.className = `alert alert-${type}`;
+    alertBox.textContent = msg;
+    alertBox.classList.remove('d-none');
+    alertBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function hideAlert() {
+    alertBox.classList.add('d-none');
+  }
+  function mark(el, bad) {
+    el.classList.toggle('is-invalid', bad);
+    el.classList.toggle('is-valid', !bad);
+  }
+  function calcAge(dateStr) {
+    if (!dateStr) return '';
+    const dob = new Date(dateStr);
+    if (Number.isNaN(dob.getTime())) return '';
+    const now = new Date();
+    let a = now.getFullYear() - dob.getFullYear();
+    const m = now.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) a--;
+    return a >= 0 ? a : '';
+  }
+
+  bdate.addEventListener('change', () => {
+    age.value = calcAge(bdate.value);
+  });
+
+  form.addEventListener('reset', () => {
+    hideAlert();
+    [firstName, lastName, bdate, age, photo, location].forEach(el => {
+      el.classList.remove('is-invalid', 'is-valid');
+    });
+    genderError.classList.add('d-none');
+    colorError.classList.add('d-none');
+    musicError.classList.add('d-none');
+    consentError.classList.add('d-none');
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    hideAlert();
+
+    const genderChecked = document.querySelector('input[name="gender"]:checked');
+    const colorChecked  = document.querySelector('input[name="fav_color"]:checked');
+    const musicChecked  = document.querySelectorAll('input[name="music[]"]:checked');
+    const consentYes    = document.getElementById('consentYes').checked;
+
+    // เผื่อผู้ใช้ยังไม่เปลี่ยน focus แต่เลือกวันเกิดแล้ว
+    if (!age.value && bdate.value) age.value = calcAge(bdate.value);
+
+    let ok = true;
+
+    // ชื่อ / สกุล
+    if (!firstName.value.trim()) { mark(firstName, true); ok = false; } else mark(firstName, false);
+    if (!lastName.value.trim())  { mark(lastName, true);  ok = false; } else mark(lastName, false);
+
+    // วันเกิด / อายุ
+    if (!bdate.value) { mark(bdate, true); ok = false; } else mark(bdate, false);
+    if (!age.value)   { mark(age, true);   ok = false; } else mark(age, false);
+
+    // รูป
+    const hasPhoto = photo.files && photo.files.length > 0;
+    mark(photo, !hasPhoto);
+    if (!hasPhoto) ok = false;
+
+    // ที่อยู่
+    if (!location.value.trim()) { mark(location, true); ok = false; } else mark(location, false);
+
+    // เพศ
+    if (!genderChecked)  { genderError.classList.remove('d-none'); ok = false; }
+    else genderError.classList.add('d-none');
+
+    // สีที่ชอบ
+    if (!colorChecked)   { colorError.classList.remove('d-none'); ok = false; }
+    else colorError.classList.add('d-none');
+
+    // แนวเพลงอย่างน้อย 1
+    if (!musicChecked || musicChecked.length === 0) { musicError.classList.remove('d-none'); ok = false; }
+    else musicError.classList.add('d-none');
+
+    // ยินยอมต้องติ๊ก
+    if (!consentYes) { consentError.classList.remove('d-none'); ok = false; }
+    else consentError.classList.add('d-none');
+
+    if (!ok) {
+      showAlert('danger', 'Error: กรุณากรอกข้อมูลให้ครบทุกช่องก่อนส่งฟอร์ม');
+      return;
+    }
+
+    showAlert('success', 'Pass: กรอกข้อมูลครบแล้ว ✅');
+  });
+});
+</script>
 
 </body>
 </html>
