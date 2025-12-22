@@ -10,9 +10,12 @@
 <div class="container pt-5">
     <h1>Workshop #HTML - FORM</h1>
 
-    <form id="html101Form" novalidate>
+    <!-- ✅ กล่องแจ้งเตือน (สำคัญมาก) -->
+    <div id="formAlert" class="alert d-none" role="alert"></div>
 
-        <div id="formAlert" class="alert d-none" role="alert"></div>
+    <!-- ✅ ต้องมีแค่ form เดียว -->
+    <form id="html101Form" method="POST" action="/html101" novalidate>
+        @csrf
 
         <div class="mb-3 row">
             <label for="inputFirstName" class="col-sm-2 col-form-label">ชื่อ</label>
@@ -69,11 +72,11 @@
             </div>
         </div>
 
+        <!-- หมายเหตุงาน: ยังไม่ต้อง upload ไฟล์ (ปล่อยเลือกได้ แต่ไม่บังคับ/ไม่ต้องส่งผล) -->
         <div class="mb-3 row">
             <label class="col-sm-2 col-form-label">รูปภาพ</label>
             <div class="col-sm-10">
                 <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
-                <div class="invalid-feedback">กรุณาเลือกรูปภาพ</div>
             </div>
         </div>
 
@@ -85,7 +88,6 @@
             </div>
         </div>
 
-        <!-- สีที่ชอบ: แดง/เขียว/สุ่ม -->
         <div class="mb-3 row">
             <label class="col-sm-2 col-form-label">สีที่ชอบ</label>
             <div class="col-sm-10" id="colorGroup">
@@ -109,11 +111,9 @@
             </div>
         </div>
 
-        <!-- แนวเพลงที่ชอบ: checkbox เลือกได้หลายข้อ -->
         <div class="mb-3 row">
             <label class="col-sm-2 col-form-label">แนวเพลงที่ชอบ</label>
             <div class="col-sm-10" id="musicGroup">
-
                 <div class="form-check"><input class="form-check-input" type="checkbox" name="music[]" value="pop" id="mPop"><label class="form-check-label" for="mPop">Pop</label></div>
                 <div class="form-check"><input class="form-check-input" type="checkbox" name="music[]" value="rock" id="mRock"><label class="form-check-label" for="mRock">Rock</label></div>
                 <div class="form-check"><input class="form-check-input" type="checkbox" name="music[]" value="hiphop" id="mHipHop"><label class="form-check-label" for="mHipHop">Hip-hop/Rap</label></div>
@@ -130,7 +130,6 @@
             </div>
         </div>
 
-        <!-- ยินยอม: ต้องติ๊ก -->
         <div class="mb-3 row">
             <label class="col-sm-2 col-form-label">ยินยอมให้เก็บข้อมูล</label>
             <div class="col-sm-10">
@@ -150,7 +149,6 @@
         </div>
 
     </form>
-
 </div>
 
 <script>
@@ -162,13 +160,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const lastName  = document.getElementById('inputLastName');
   const bdate     = document.getElementById('bdate');
   const age       = document.getElementById('age');
-  const photo     = document.getElementById('photo');
   const location  = document.getElementById('location');
 
   const genderError  = document.getElementById('genderError');
   const colorError   = document.getElementById('colorError');
   const musicError   = document.getElementById('musicError');
   const consentError = document.getElementById('consentError');
+
+  let submitting = false;
 
   function showAlert(type, msg) {
     alertBox.className = `alert alert-${type}`;
@@ -199,8 +198,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   form.addEventListener('reset', () => {
+    submitting = false;
     hideAlert();
-    [firstName, lastName, bdate, age, photo, location].forEach(el => {
+    [firstName, lastName, bdate, age, location].forEach(el => {
       el.classList.remove('is-invalid', 'is-valid');
     });
     genderError.classList.add('d-none');
@@ -210,6 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   form.addEventListener('submit', (e) => {
+    if (submitting) return;   // ✅ กันวนตอน submit จริง
     e.preventDefault();
     hideAlert();
 
@@ -218,40 +219,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicChecked  = document.querySelectorAll('input[name="music[]"]:checked');
     const consentYes    = document.getElementById('consentYes').checked;
 
-    // เผื่อผู้ใช้ยังไม่เปลี่ยน focus แต่เลือกวันเกิดแล้ว
     if (!age.value && bdate.value) age.value = calcAge(bdate.value);
 
     let ok = true;
 
-    // ชื่อ / สกุล
     if (!firstName.value.trim()) { mark(firstName, true); ok = false; } else mark(firstName, false);
     if (!lastName.value.trim())  { mark(lastName, true);  ok = false; } else mark(lastName, false);
 
-    // วันเกิด / อายุ
     if (!bdate.value) { mark(bdate, true); ok = false; } else mark(bdate, false);
     if (!age.value)   { mark(age, true);   ok = false; } else mark(age, false);
 
-    // รูป
-    const hasPhoto = photo.files && photo.files.length > 0;
-    mark(photo, !hasPhoto);
-    if (!hasPhoto) ok = false;
-
-    // ที่อยู่
     if (!location.value.trim()) { mark(location, true); ok = false; } else mark(location, false);
 
-    // เพศ
     if (!genderChecked)  { genderError.classList.remove('d-none'); ok = false; }
     else genderError.classList.add('d-none');
 
-    // สีที่ชอบ
     if (!colorChecked)   { colorError.classList.remove('d-none'); ok = false; }
     else colorError.classList.add('d-none');
 
-    // แนวเพลงอย่างน้อย 1
     if (!musicChecked || musicChecked.length === 0) { musicError.classList.remove('d-none'); ok = false; }
     else musicError.classList.add('d-none');
 
-    // ยินยอมต้องติ๊ก
     if (!consentYes) { consentError.classList.remove('d-none'); ok = false; }
     else consentError.classList.add('d-none');
 
@@ -260,7 +248,9 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    showAlert('success', 'Pass: กรอกข้อมูลครบแล้ว ✅');
+    showAlert('success', 'Pass: กรอกข้อมูลครบแล้ว ✅ กำลังส่ง...');
+    submitting = true;
+    form.submit(); // ✅ ส่งไป Controller store เพื่อไปหน้าใหม่
   });
 });
 </script>
